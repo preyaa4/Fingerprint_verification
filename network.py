@@ -102,24 +102,56 @@ class Network(object):
         x = slim.fully_connected(x, self.hidden_units2) ### output
 
         return x
-
-    def train_network(self,anchor_output,positive_output,negative_output):
-
-        x_reference =
-        x_train =
-        margin =
-
-
+    def loss_function(self,anchor_output,positive_output,negative_output,margin=0.2):
         #### Triplet  loss function ###
         d_pos = tf.reduce_sum(tf.square(anchor_output - positive_output), 1)
         d_neg = tf.reduce_sum(tf.square(anchor_output - negative_output), 1)
 
         loss = tf.maximum(0., margin + d_pos - d_neg)
-        loss = tf.reduce_mean(loss)
-
+        cost = tf.reduce_mean(loss)
+        return cost
         ### end loss function ###
 
+
+    def train_network(self):
+
+        margin =
+        learning_rate =
+        beta1 =
+        beta2 =
+        epochs =
+
+        save_path =
+
+
+
+        saver = tf.train.Saver(var_list=tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope='ModelCNN'))
+
         optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=beta1, beta2=beta2).minimize(self.cost)
+
+        with tf.Session() as sess:
+            # saver = tf.train.import_meta_graph('./training2/model.ckpt-110')
+            # saver.restore(sess, tf.train.latest_checkpoint('./training2/'))
+
+            #sess.run(init)
+            for epoch in range(epochs + 1):
+                while (True):
+                        ###### generate triplets in this section ###
+
+                        ####  ########
+
+                        cost = self.loss_function(anchor_output, positive_output, negative_output)
+                        _, loss = sess.run([optimizer, cost])
+
+                        print("Epoch : ", epoch)
+                        print("Loss: ",loss)
+
+                saver.save(sess, save_path, global_step=epoch)
+                if (epoch % 1000 == 0):
+                    learning_rate = learning_rate / 10
+
+
+
 
 
 
