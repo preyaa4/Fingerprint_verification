@@ -72,13 +72,24 @@ adgrad = Adagrad(lr=0.01, epsilon=None, decay=0.0)
 
 model.compile(loss='categorical_crossentropy', optimizer=adgrad)
 
+
+
+
+
+
+
+
+
 model.fit_generator(
         train_generator,
         steps_per_epoch=1,  ### pata karo
         epochs=epochs,
         validation_data=validation_generator,
-        validation_steps=4,
-        verbose=True)
+        validation_steps=4/2,
+        verbose=True,
+        callbacks=[history])
+
+
 
 model.save_weights('model.h5')  # always save your weights after training or during training
 
