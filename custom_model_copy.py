@@ -10,9 +10,10 @@ from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_a
 #### Hyperparameters and variables ###
 
 img_size = 256 ## to be defined later
-epochs  = 5
+epochs  = 50000
 train_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
 test_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
+
 # Dataset Part ###
 
 train_datagen = ImageDataGenerator(
@@ -24,7 +25,7 @@ train_datagen = ImageDataGenerator(
 train_generator = train_datagen.flow_from_directory(
         train_path,  # this is the target directory
         target_size=(img_size, img_size),  # all images will be resized to 150x150
-        batch_size=2,
+        batch_size=32,
         class_mode='categorical')  # since we use binary_crossentropy loss, we need binary labels
 
 test_datagen = ImageDataGenerator(rescale=1./255)
@@ -33,11 +34,12 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 validation_generator = test_datagen.flow_from_directory(
         test_path,
         target_size=(img_size, img_size),
-        batch_size=2    ,
+        batch_size=32    ,
         class_mode='categorical')
 
 ####  End dataset part ####
-history=keras.callbacks.History()
+
+
 
 #####
 
@@ -70,28 +72,18 @@ model.summary()
 adgrad = Adagrad(lr=0.01, epsilon=None, decay=0.0)
 
 
-model.compile(loss='categorical_crossentropy', optimizer=adgrad)
-
-
-
-
-
-
+model.compile(loss='categorical_crossentropy', optimizer=adgrad, metrics=['accuracy'])
 
 
 
 model.fit_generator(
         train_generator,
-        steps_per_epoch=1,  ### pata karo
         epochs=epochs,
+        steps_per_epoch=1,
         validation_data=validation_generator,
-        validation_steps=4/2,
+        validation_steps=1,
         verbose=True,
-        callbacks=[history])
-
-
+        )
 
 model.save_weights('model.h5')  # always save your weights after training or during training
 
-#model.fit(x_train, y_train, batch_size=32, epochs=epochs)
-#score = model.evaluate(x_test, y_test, batch_size=32)
