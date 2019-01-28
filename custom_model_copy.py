@@ -74,7 +74,8 @@ adgrad = Adagrad(lr=0.01, epsilon=None, decay=0.0)
 
 model.compile(loss='categorical_crossentropy', optimizer=adgrad, metrics=['accuracy'])
 
-
+tensorboard = keras.callbacks.TensorBoard(log_dir='./', histogram_freq=0,
+          write_graph=True, write_images=True)
 
 model.fit_generator(
         train_generator,
@@ -83,6 +84,7 @@ model.fit_generator(
         validation_data=validation_generator,
         validation_steps=1,
         verbose=True,
+        callbacks=[tensorboard]
         )
 
 model.save_weights('model.h5')  # always save your weights after training or during training

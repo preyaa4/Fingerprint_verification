@@ -77,7 +77,8 @@ adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad
 
 model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 
-
+tensorboard = keras.callbacks.TensorBoard(log_dir='./', histogram_freq=0,
+          write_graph=True, write_images=True)
 
 model.fit_generator(
         train_generator,
@@ -86,7 +87,9 @@ model.fit_generator(
         validation_data=validation_generator,
         validation_steps=1,
         verbose=True,
+        callbacks=[tensorboard]
         )
+
 
 model.save_weights('model.h5')  # always save your weights after training or during training
 
