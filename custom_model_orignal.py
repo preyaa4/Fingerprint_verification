@@ -3,7 +3,7 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
-from keras.optimizers import SGD,Adagrad
+from keras.optimizers import SGD,Adagrad,Adam
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 
 
@@ -13,6 +13,7 @@ img_size = 256 ## to be defined later
 epochs  = 50000
 train_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
 test_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
+rotation_range  = 10
 
 # Dataset Part ###
 
@@ -20,7 +21,9 @@ train_datagen = ImageDataGenerator(
         rescale=1./255,
         shear_range=0.2,
         zoom_range=0.2,
-        horizontal_flip=True)
+        rotation_range=rotation_range,
+        horizontal_flip=True,
+        vertical_flip=True)
 
 train_generator = train_datagen.flow_from_directory(
         train_path,  # this is the target directory
@@ -69,10 +72,10 @@ model.add(Dense(2, activation='softmax'))
 
 model.summary()
 
-adgrad = Adagrad(lr=0.01, epsilon=None, decay=0.0)
+#adgrad = Adagrad(lr=0.01, epsilon=None, decay=0.0)
+adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 
-
-model.compile(loss='categorical_crossentropy', optimizer=adgrad, metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 
 
 
