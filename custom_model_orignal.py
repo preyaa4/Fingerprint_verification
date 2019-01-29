@@ -10,7 +10,7 @@ from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_a
 #### Hyperparameters and variables ###
 
 img_size = 256 ## to be defined later
-epochs  = 50000
+epochs  = 5
 train_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
 test_path = '/home/pranav/PycharmProjects/Fingerprint live detection/liveDet_data/Digital_Persona'
 rotation_range  = 10
@@ -91,5 +91,5 @@ model.fit_generator(
         )
 
 
-model.save_weights('model.h5')  # always save your weights after training or during training
+model.save('model.h5')  # always save your weights after training or during training
 
