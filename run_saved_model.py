@@ -64,3 +64,38 @@ test_generator = test_datagen.flow_from_directory(
 print(model.metrics_names)
 _,accuracy=model.evaluate_generator(test_generator, steps=None, max_queue_size=10, workers=1, use_multiprocessing=False, verbose=0)
 print(accuracy)
+
+
+######### getting true positives tp, true negatives tn, false positives fp and false negatives fn #########
+
+_,y_true = test_generator.next()
+#Confution Matrix and Classification Report
+y_true = np.argmax(y_true, axis=1)
+Y_pred = model.predict_generator(test_generator,steps=1)
+y_pred = np.argmax(Y_pred, axis=1)
+
+
+tn, fp, fn, tp = confusion_matrix([0, 1, 0, 1], [1, 1, 1, 0]).ravel()
+print ("tn: ", tn,"\nfp: ", fp, "\nfn: ", fn, "\ntp: ", tp )
+
+'''false_negative =0                       #actually live predicts fake
+false_positive = 0                      #actually fake predicts live
+true_positive=0                         #actually live predicts live
+true_negative=0                         #actually fake predicts fake
+
+
+for i in range(y_pred.shape[0]):
+    if(y_true[i] == 0 and y_pred[i] == 0):
+        true_negative=true_negative+1
+    elif (y_true[i] == 0 and y_pred[i] == 1):
+        false_positive=false_positive+1
+    elif (y_true[i] == 1 and y_pred[i] == 0):
+        false_negative = false_negative + 1
+    elif (y_true[i] == 1 and y_pred[i] == 1):
+        true_positive = true_positive + 1
+
+print("fn, fp, tp, tn")
+print (false_negative,false_positive,true_positive,true_negative)
+
+
+print(y_true,y_pred)'''
